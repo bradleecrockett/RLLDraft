@@ -10,4 +10,4 @@ A website to facilitate a Little League Draft
 * Players can be marked as brothers who must go to the same team. When a coach picks one brother, both brothers are added to the coach's roster, and the coach's next pick gets skipped.
 * A coach can be skipped (or pass) during a round to facilitate a brother pick.
 * Hi :D
-* [p'jklhmbgv]
+- we also need to display the coaches name when it's their turn, and begin a timer.
