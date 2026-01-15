@@ -24,9 +24,16 @@
     }
 
     .container { display: flex; gap: 20px; }
-    .box { border: 1px solid #ccc; padding: 10px; width: 30%; background: white; border-radius: 5px; }
-    .player { cursor: pointer; padding: 8px; margin: 5px 0; background: #f0f0f0; border-radius: 3px; transition: 0.2s; }
-    .player:hover { background: #eef; transform: translateX(5px); }
+    .box { border: 1px solid #ccc; padding: 10px; width: 30%; background: white; border-radius: 5px; max-height: 600px; overflow-y: auto; }
+    #players {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      grid-auto-flow: column;
+    }
+
+    .player { cursor: pointer; padding: 8px; margin: 0; background: #f0f0f0; border-radius: 3px; transition: 0.2s; font-size: 0.9em; }
+    .player:hover { background: #eef; transform: translateX(3px); }
     .current { font-weight: bold; color: green; background: #f0fff0; padding: 5px; border-radius: 3px; }
     textarea { width: 400px; height: 120px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
     
@@ -214,7 +221,7 @@
 
     .final-roster {
       text-align: left;
-      max-height: 400px;
+      max-height: 250px;
       overflow-y: auto;
     }
 
@@ -224,6 +231,15 @@
       background: rgba(255,255,255,0.2);
       border-radius: 5px;
       font-size: 0.95em;
+    }
+
+    .player-count {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,0.3);
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #ffd700;
     }
 
     .restart-btn {
@@ -248,6 +264,17 @@
     }
 
     h1 { margin-bottom: 20px; color: #333; }
+
+    #playerSearchBox {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 2px solid #667eea;
+      border-radius: 5px;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+      display: none;
+    }
   </style>
 </head>
 
@@ -282,6 +309,7 @@ Tom Jones | A"></textarea><br><br>
   <div class="container">
     <div class="box">
       <h3>Available Players</h3>
+      <input id="playerSearchBox" type="text" placeholder="Search players..." oninput="searchPlayers()">
       <div id="players"></div>
     </div>
 

@@ -106,7 +106,8 @@ function startPlayerDraft() {
         name,
         brotherGroup: brotherGroup || null
       };
-    });
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   currentCoachIndex = 0;
   skipNextPick = false;
@@ -114,6 +115,10 @@ function startPlayerDraft() {
   teamSelectionPhase = false;
   draftDirection = 1;
   roundNumber = 1;
+
+  // Show search box during player draft
+  document.getElementById('playerSearchBox').style.display = 'block';
+  document.getElementById('playerSearchBox').value = '';
 
   renderPlayers();
   renderCoaches();
@@ -269,6 +274,7 @@ function endDraft() {
   `;
 
   coaches.forEach((coach, index) => {
+    const playerCount = rosters[coach].length;
     div.innerHTML += `
       <div class="final-team-card" style="animation-delay: ${index * 0.2}s;">
         <div class="final-team-header">${coach}</div>
@@ -276,6 +282,7 @@ function endDraft() {
         <div class="final-roster">
           ${rosters[coach].map(p => `<div class="final-player">${p}</div>`).join('')}
         </div>
+        <div class="player-count">Players: ${playerCount}</div>
       </div>
     `;
   });
@@ -306,12 +313,36 @@ function renderPlayers() {
   const div = document.getElementById('players');
   div.innerHTML = '';
 
-  players.forEach(player => {
+  // Limit to first 100 players
+  const displayPlayers = players.slice(0, 100);
+
+  displayPlayers.forEach(player => {
     const el = document.createElement('div');
     el.className = 'player';
     el.textContent =
       player.name +
-      (player.brotherGroup ? ` (Brother ${player.brotherGroup})` : '');
+      (player.brotherGroup ? ` (${player.brotherGroup})` : '');
+    el.onclick = () => pickPlayer(player);
+    div.appendChild(el);
+  });
+}
+
+function searchPlayers() {
+  const searchTerm = document.getElementById('playerSearchBox').value.toLowerCase();
+  const div = document.getElementById('players');
+  div.innerHTML = '';
+
+  // Filter players based on search term
+  const filteredPlayers = players.filter(player =>
+    player.name.toLowerCase().includes(searchTerm)
+  ).slice(0, 100);
+
+  filteredPlayers.forEach(player => {
+    const el = document.createElement('div');
+    el.className = 'player';
+    el.textContent =
+      player.name +
+      (player.brotherGroup ? ` (${player.brotherGroup})` : '');
     el.onclick = () => pickPlayer(player);
     div.appendChild(el);
   });
