@@ -13,5 +13,138 @@
         
         <h1 class="Title">--ROSEVILLE LITTLE LEAGUE--</h1>
 
-    </body>
+    </body><!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>RLL Draft - Demo</title>
+  <style>
+    body { font-family: system-ui, Arial; padding: 16px; }
+    .container { display: flex; gap: 24px; }
+    .box { border: 1px solid #ccc; padding: 12px; width: 320px; }
+    button.player { display:block; margin:6px 0; width:100%; text-align:left; }
+    .roster li { margin:4px 0; }
+  </style>
+</head>
+<body>
+  <h1>RLL Draft — Select a Coach, Pick a Player</h1>
+
+  <div>
+    <label for="coachSelect">Active coach:</label>
+    <select id="coachSelect"></select>
+  </div>
+
+  <div class="container" style="margin-top:12px;">
+    <div class="box">
+      <h3>Available players</h3>
+      <div id="availableList"></div>
+    </div>
+
+    <div class="box">
+      <h3>Coaches & rosters</h3>
+      <div id="coachesList"></div>
+    </div>
+  </div>
+
+  <script>
+    // Simple in-memory state
+    const players = [
+      'Aiden Smith','Bella Jones','Caleb Lee','Dylan Kim','Evelyn Park'
+    ];
+
+    const coaches = [
+      { id: 'c1', name: 'Coach Miller', roster: [] },
+      { id: 'c2', name: 'Coach Rivera', roster: [] },
+      { id: 'c3', name: 'Coach Patel', roster: [] }
+    ];
+
+    let activeCoachId = coaches[0].id;
+
+    // DOM refs
+    const coachSelect = document.getElementById('coachSelect');
+    const availableList = document.getElementById('availableList');
+    const coachesList = document.getElementById('coachesList');
+
+    function renderCoachSelect() {
+      coachSelect.innerHTML = '';
+      coaches.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name;
+        coachSelect.appendChild(opt);
+      });
+      coachSelect.value = activeCoachId;
+      coachSelect.addEventListener('change', () => {
+        activeCoachId = coachSelect.value;
+        renderAvailable();
+        renderCoaches();
+      });
+    }
+
+    function renderAvailable() {
+      availableList.innerHTML = '';
+      if (players.length === 0) {
+        availableList.textContent = 'No players left';
+        return;
+      }
+      players.forEach((p, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'player';
+        btn.textContent = p;
+        btn.addEventListener('click', () => pickPlayer(idx));
+        availableList.appendChild(btn);
+      });
+    }
+
+    function renderCoaches() {
+      coachesList.innerHTML = '';
+      coaches.forEach(c => {
+        const div = document.createElement('div');
+        const title = document.createElement('strong');
+        title.textContent = c.name + (c.id === activeCoachId ? ' ◀ active' : '');
+        div.appendChild(title);
+
+        const ul = document.createElement('ul');
+        ul.className = 'roster';
+        if (c.roster.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = '(no players)';
+          ul.appendChild(li);
+        } else {
+          c.roster.forEach(player => {
+            const li = document.createElement('li');
+            li.textContent = player;
+            ul.appendChild(li);
+          });
+        }
+
+        div.appendChild(ul);
+        coachesList.appendChild(div);
+      });
+    }
+
+    // Core: when a coach picks a player, remove from available and add to coach roster
+    function pickPlayer(playerIndex) {
+      const playerName = players[playerIndex];
+      if (!playerName) return;
+
+      // remove player from available list
+      players.splice(playerIndex, 1);
+
+      // add player to active coach roster
+      const coach = coaches.find(c => c.id === activeCoachId);
+      if (!coach) return;
+      coach.roster.push(playerName);
+
+      // Re-render UI
+      renderAvailable();
+      renderCoaches();
+    }
+
+    // initial render
+    renderCoachSelect();
+    renderAvailable();
+    renderCoaches();
+  </script>
+</body>
 </html>
