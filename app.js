@@ -98,6 +98,7 @@
         const nameDiv = document.createElement('div');
         nameDiv.className = 'name';
         nameDiv.textContent = p.name;
+        row.appendChild(checkbox);
         row.appendChild(nameDiv);
         fragment.appendChild(row);
       });
@@ -201,11 +202,8 @@
     messageEl.textContent = '';
   });
 
-<<<<<<< HEAD
-=======
   showAvailableOnly.addEventListener('change', renderPlayers);
 
->>>>>>> Logan-branch
   // Allow pressing Ctrl+Enter (Cmd+Enter on macOS) in textarea to load quickly
   namesInput.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
@@ -600,10 +598,4 @@
   ensureCoachControls();
   renderCoaches();
   renderPlayers();
-<<<<<<< HEAD
-  renderRosters();
-  updateCurrentCoach();
-})();
-=======
 })()})();
->>>>>>> Logan-branch
